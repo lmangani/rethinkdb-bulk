@@ -1,0 +1,33 @@
+{
+  "name": "rethinkdb-bulk",
+  "version": "1.0.1",
+  "description": "Bulk Operations for RethinkDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lmangani/rethinkdb-bulk.git"
+  },
+  "keywords": [
+    "rethinkdb",
+    "rethink",
+    "bulk",
+    "insert",
+    "index",
+    "queue",
+    "database",
+    "json"
+  ],
+  "author": "Lorenzo Mangani <lorenzo.mangani@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lmangani/rethinkdb-bulk/issues"
+  },
+  "homepage": "https://github.com/lmangani/rethinkdb-bulk#readme",
+  "dependencies": {
+    "cron": "^1.3.0",
+    "rethinkdbdash": "^2.3.31"
+  }
+}
