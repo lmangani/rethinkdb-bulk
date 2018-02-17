@@ -9,6 +9,11 @@ This simple module wraps a RethinkDB Client and Bulk/Queue Handler, automaticall
 
 ### Usage
 
+#### Install
+```
+npm install rethinkdb-bulk
+```
+
 #### Init
 The following configuration will create a Bulk Queue connected to RethinkDB _(node or cluster)_ 
 ```
