@@ -18,9 +18,9 @@ exports.getBucket = function (opts) {
 	const indexType = opts.indexType || 'single';
 	const indexType = opts.indexType || 'single';
 
-	const bulk_timeout: opts.bulk_timeout || 2000;
-	const bulk_maxSize: opts.bulk_maxSize || 1000;
-	const bulk_useInterval: opts.bulk_useInterval || true;
+	const bulk_timeout = opts.bulk_timeout || 2000;
+	const bulk_maxSize = opts.bulk_maxSize || 1000;
+	const bulk_useInterval = opts.bulk_useInterval || true;
 
 
 	if (!config) {
@@ -31,7 +31,7 @@ exports.getBucket = function (opts) {
 		throw new Error('Must provide an "opts.dbName" string');
 	}
 
-	if (!tablexName) {
+	if (!tableName) {
 		throw new Error('Must provide an "opts.tableName" string');
 	}
 
@@ -115,10 +115,11 @@ exports.getBucket = function (opts) {
 // Creates the necessary Elasticsearch index if it doesn't alreay exist
 function createIndexDb(client, dbName, tableName) {
   try {
-	if(dbName) { client.dbCreate(dbName).run().then(function(result) {
+	if(dbName) {
+		client.dbCreate(dbName).run().then(function(result) {
 			console.log(result.tables_created);
-  			if(tableName) { client.db(db).tableCreate(tableName).run(); }
-		   }
+  			if(tableName) { client.db(dbName).tableCreate(tableName).run(); }
+		});
  	}
 	return;
   } catch(err) {

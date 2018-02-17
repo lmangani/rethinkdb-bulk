@@ -1,6 +1,6 @@
 {
   "name": "rethinkdb-bulk",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Bulk Operations for RethinkDB",
   "main": "index.js",
   "scripts": {
