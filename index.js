@@ -8,7 +8,6 @@ const INDEX_TYPES = {
 	monthly: '0 0 0 1 * *' // Midnight on the first day of every month
 };
 
-
 exports.getBucket = function (opts) {
 	opts = opts || {};
 
@@ -16,12 +15,10 @@ exports.getBucket = function (opts) {
 	const dbName = opts.dbName;
 	const tableName = opts.tableName;
 	const indexType = opts.indexType || 'single';
-	const indexType = opts.indexType || 'single';
-
 	const bulk_timeout = opts.bulk_timeout || 2000;
 	const bulk_maxSize = opts.bulk_maxSize || 1000;
 	const bulk_useInterval = opts.bulk_useInterval || true;
-
+	const logger = opts.logger || console.log;
 
 	if (!config) {
 		throw new Error('Must provide an "opts.config" object');
@@ -40,10 +37,21 @@ exports.getBucket = function (opts) {
 			JSON.stringify(Object.keys(INDEX_TYPES)));
 	}
 
-	const r = require('rethinkdbdash')(config);
+	var client;
 
-	// Dynamic Client for Ops
-	var client = r.db(getCurrentdbName()).table(tableName);
+	try {
+		const r = require('rethinkdbdash')(config);
+		r.getPoolMaster().on('healthy', function(healthy) {
+  		  if (healthy === true) { logger('RethinkDB healthy'); }
+  		  else { logger('RethinkDB unhealthy');}
+  		});
+		r.connect();
+
+	} catch(err){
+		throw new Error(JSON.stringify(err));
+	}
+	// Dynamic Client
+	client = r.db(getCurrentdbName()).table(tableName);
 
 	const indexCronTime = INDEX_TYPES[indexType];
 	if (indexCronTime) {
@@ -107,7 +115,6 @@ exports.getBucket = function (opts) {
 	  });
 	});
 
-
 	return bucket;
 
 };
@@ -117,12 +124,14 @@ function createIndexDb(client, dbName, tableName) {
   try {
 	if(dbName) {
 		client.dbCreate(dbName).run().then(function(result) {
-			console.log(result.tables_created);
+			logger(result.tables_created);
   			if(tableName) { client.db(dbName).tableCreate(tableName).run(); }
 		});
  	}
 	return;
+
   } catch(err) {
+	logger(err);
 	throw new Error('Failed initializing DB Tables!', err);
   }
 }
